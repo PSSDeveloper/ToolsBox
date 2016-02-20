@@ -42,8 +42,10 @@
 - (UIImage *)getSubImageWithCGRect:(CGRect)mCGRect centerBool:(BOOL)centerBool
 {
     /*如若centerBool为Yes则是由中心点取mCGRect范围的图片*/
+    //原始图片的宽和高
     float imgwidth = self.size.width;
     float imgheight = self.size.height;
+    //截图区域的宽和高
     float viewwidth = mCGRect.size.width;
     float viewheight = mCGRect.size.height;
     CGRect rect;
@@ -52,18 +54,19 @@
     else{
         if (viewheight < viewwidth) {//截图区域为扁的矩形
             if (imgwidth <= imgheight) {
+//                rect = CGRectMake(0, 0, imgwidth, imgwidth*viewheight/viewwidth);
                 rect = CGRectMake(0, 0, imgwidth, imgwidth*viewheight/viewwidth);
             }else {
                 float width = viewwidth*imgheight/viewheight;
                 float x = (imgwidth - width)/2 ;
                 if (x > 0) {
                     rect = CGRectMake(x, 0, width, imgheight);
-                }else {
+                }else {/Users/iningfeng/Desktop/FunCoding/launchimage/launchimage/Assets.xcassets/LaunchImage.launchimage/launchImage@2x.png
                     rect = CGRectMake(0, 0, imgwidth, imgwidth*viewheight/viewwidth);
                 }
             }
         }else {
-            if (imgwidth <= imgheight) {
+            if (imgwidth <= imgheight) {//截图区域为瘦长条
                 float height = viewheight*imgwidth/viewwidth;
                 if (height < imgheight) {
                     rect = CGRectMake(0, 0, imgwidth, height);
@@ -93,5 +96,19 @@
     return smallImage;
 }
 
-
+- (UIImage*)cropImageWithRect:(CGRect)cropRect
+{
+    CGRect drawRect = CGRectMake(-cropRect.origin.x , -cropRect.origin.y, self.size.width * self.scale, self.size.height * self.scale);
+    
+    UIGraphicsBeginImageContext(cropRect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextClearRect(context, CGRectMake(0, 0, cropRect.size.width, cropRect.size.height));
+    
+    [self drawInRect:drawRect];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
 @end

@@ -13,4 +13,5 @@
 - (UIImage *)scaleToSize:(CGSize)size;
 /** 将图片按照所给区域以及是否以中心对称截取 */
 - (UIImage *)getSubImageWithCGRect:(CGRect)mCGRect centerBool:(BOOL)centerBool;
+- (UIImage*)cropImageWithRect:(CGRect)cropRect;
 @end
