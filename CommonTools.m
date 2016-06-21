@@ -49,5 +49,66 @@
     }
     return result;
 }
++ (UIImage *)createImageWithColor:(UIColor *)color{
+    CGRect rect =  CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+/**
+ *  判断字符串是否为空
+ *
+ *  @param string 需要判断的字符串
+ *
+ *  @return
+ */
++ (BOOL)isBlinkString:(NSString *)string{
+    if (string == nil) {
+        return YES;
+    }
+    
+    if (string == NULL) {
+        return YES;
+    }
+    
+    if ([string isKindOfClass:[NSNull class]]) {
+        return YES;
+    }
+    
+    if (![string isKindOfClass:[NSString class]]) {
+        string = [NSString stringWithFormat:@"%@",string];
+    }
+    
+    if ([string isEqualToString:@"(null)"]) {
+        return YES;
+    }
+    
+    if ([string isEqualToString:@"<null>"]) {
+        return YES;
+    }
+    
+    if ([string isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0) {
+        return YES;
+    }
+    
+    return NO;
+}
+/** 正则表达式匹配手机号码 */
++ (BOOL)isPhoneNumber:(NSString *)phoneNum{
+    if (phoneNum.length != 11) {
+        return NO;
+    }
+    NSString *MOBILE = @"^1(3[0-9]|4[57]|5[0-35-9]|8[0-9]|70)\\d{8}$";
+    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
+    return [regextestmobile evaluateWithObject:phoneNum];
+}
 
 @end
